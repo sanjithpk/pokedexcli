@@ -29,7 +29,7 @@ func getCommands() map[string]cliCommand {
 		},
 		"mapb": {
 			name:        "mapb",
-			description: "Similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
+			description: "Lists previous location areas",
 			callback:    commandMapB,
 		},
 	}

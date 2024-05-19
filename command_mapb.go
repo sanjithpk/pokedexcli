@@ -3,6 +3,9 @@ package main
 import "fmt"
 
 func commandMapB(cfg *config) error {
+	if cfg.prevLocationAreaUrl == nil {
+		return fmt.Errorf("you're on the first page")
+	}
 	resp, err := cfg.pokeapiClient.ListLocationAreas(cfg.prevLocationAreaUrl)
 
 	if err != nil {
