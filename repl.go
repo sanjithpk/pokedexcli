@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -32,22 +33,37 @@ func getCommands() map[string]cliCommand {
 			description: "Lists previous location areas",
 			callback:    commandMapB,
 		},
+		"explore": {
+			name:        "explore {location_area}",
+			description: "Lists pokemons in the area",
+			callback:    commandExplore,
+		},
 	}
 }
 
+func getWords(words string) []string {
+	wordList := strings.Fields(strings.ToLower(words))
+	return wordList
+}
 
-func repl(cfg *config)  {
+func repl(cfg *config) {
 	for {
-		var command string
+		var input string
 		fmt.Print("Pokedex > ")
-		fmt.Scanf("%s", &command)
+		fmt.Scanf("%s", &input)
 		commands := getCommands()
+		words := getWords(input)
+		command := words[0]
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
 		if _, ok := commands[command]; !ok {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := commands[command].callback(cfg)
-		if err != nil{
+		err := commands[command].callback(cfg, args...)
+		if err != nil {
 			fmt.Println(err)
 			continue
 		}
