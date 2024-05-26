@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -38,6 +40,11 @@ func getCommands() map[string]cliCommand {
 			description: "Lists pokemons in the area",
 			callback:    commandExplore,
 		},
+		"catch": {
+			name:        "catch {pokemon_name}",
+			description: "Catch pokemons in the area",
+			callback:    commandCatch,
+		},
 	}
 }
 
@@ -48,9 +55,9 @@ func getWords(words string) []string {
 
 func repl(cfg *config) {
 	for {
-		var input string
+		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Pokedex > ")
-		fmt.Scanf("%s", &input)
+		input, _ := reader.ReadString('\n')
 		commands := getCommands()
 		words := getWords(input)
 		command := words[0]
